@@ -60,4 +60,24 @@ class OwnerTest {
 		assertThat(lama.getOwner()).isEqualTo(owner);
 		assertThat(owner.getPetsInternal()).hasSize(3);
 	}
+
+	@Test
+	public void Pet_with_id_and_specific_case_insensitive_name_is_returned_correctly() {
+		assertThat(owner.getPet("DOG", true)).isEqualTo(dog);
+	}
+
+	@Test
+	public void Pet_without_id_and_specific_case_insensitive_name_is_not_returned() {
+		assertThat(owner.getPet("CaT", true)).isNull();
+	}
+
+	@Test
+	public void Pet_with_specific_case_insensitive_name_is_returned_correctly() {
+		assertThat(owner.getPet("DOG")).isEqualTo(dog);
+	}
+
+	@Test
+	public void Null_is_returned_if_name_does_not_exist_in_owners_pets_internal() {
+		assertThat(owner.getPet("Seal")).isNull();
+	}
 }
