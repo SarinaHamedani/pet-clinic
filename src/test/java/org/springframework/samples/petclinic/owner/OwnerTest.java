@@ -24,5 +24,20 @@ class OwnerTest {
 		lama = new Pet();
 		lama.setName("lama");
 		owner = new Owner();
+		Set<Pet> pets = new HashSet<>();
+		pets.add(dog);
+		pets.add(cat);
+		pets.add(duck);
+		owner.setPetsInternal(pets);
+	}
+	@Test
+	public void Empty_pet_internals_are_returned_correctly() {
+		owner = new Owner();
+		assertThat(owner.getPetsInternal()).hasSize(0);
+	}
+
+	@Test
+	public void Pet_internals_are_returned_correctly() {
+		assertThat(owner.getPetsInternal()).hasSize(3);
 	}
 }
