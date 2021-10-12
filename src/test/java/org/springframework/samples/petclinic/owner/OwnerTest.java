@@ -45,4 +45,19 @@ class OwnerTest {
 	public void Pets_are_sorted_and_returned_correctly() {
 		assertThat(owner.getPets()).hasSize(3).containsExactly(cat, dog, duck);
 	}
+
+	@Test
+	public void New_pets_are_added_correctly() {
+		owner.addPet(lama);
+		assertThat(lama.getOwner()).isEqualTo(owner);
+		assertThat(owner.getPetsInternal()).hasSize(4);
+	}
+
+	@Test
+	public void Pets_with_id_are_added_correctly() {
+		lama.setId(133);
+		owner.addPet(lama);
+		assertThat(lama.getOwner()).isEqualTo(owner);
+		assertThat(owner.getPetsInternal()).hasSize(3);
+	}
 }
