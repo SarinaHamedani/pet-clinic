@@ -40,4 +40,9 @@ class OwnerTest {
 	public void Pet_internals_are_returned_correctly() {
 		assertThat(owner.getPetsInternal()).hasSize(3);
 	}
+
+	@Test
+	public void Pets_are_sorted_and_returned_correctly() {
+		assertThat(owner.getPets()).hasSize(3).containsExactly(cat, dog, duck);
+	}
 }
