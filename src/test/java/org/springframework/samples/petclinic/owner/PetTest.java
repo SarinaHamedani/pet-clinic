@@ -14,7 +14,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.allOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Theories.class)
@@ -65,5 +64,13 @@ public class PetTest {
 		visits.add(visit5);
 		visits.add(visit1);
 		return visits;
+	}
+
+	@Theory
+	public void Pets_visits_are_sorted_correctly_according_by_most_recent_date(List<Visit> visits) {
+		Pet p = new Pet();
+		visits.forEach(p::addVisit);
+		List<LocalDate> actual = p.getVisits().stream().map(Visit::getDate).collect(Collectors.toList());
+		assertThat(actual).isSortedAccordingTo(Comparator.reverseOrder());
 	}
 }
