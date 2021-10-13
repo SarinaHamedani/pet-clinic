@@ -39,4 +39,31 @@ public class PetTest {
 		visit3.setDate(date3);
 		visit4.setDate(date4);
 	}
+
+	@DataPoint
+	public static List<Visit> visitsInOrder() {
+		List<Visit> visits = new ArrayList<>();
+		visits.add(visit1);
+		visits.add(visit2);
+		visits.add(visit3);
+		return visits;
+	}
+
+	@DataPoint
+	public static List<Visit> visitsInReverseOrder() {
+		List<Visit> visits = new ArrayList<>();
+		visits.add(visit5);
+		visits.add(visit3);
+		visits.add(visit2);
+		return visits;
+	}
+
+	@DataPoint
+	public static List<Visit> visitsWithNoOrder() {
+		List<Visit> visits = new ArrayList<>();
+		visits.add(visit4);
+		visits.add(visit5);
+		visits.add(visit1);
+		return visits;
+	}
 }
