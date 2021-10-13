@@ -61,4 +61,10 @@ public class PetServiceTest {
 			{ 10, hamster }
 		});
 	}
+
+	@Test
+	public void Pets_are_found_correctly() {
+		System.out.println("Parameterized Number is : " + inputId);
+		assertEquals(expectedPet, petService.findPet(inputId));
+	}
 }
