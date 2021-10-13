@@ -31,12 +31,19 @@ public class OwnerTest {
 		lama = new Pet();
 		lama.setName("lama");
 		owner = new Owner();
+		owner.setAddress("123 Main Street");
+		owner.setCity("New York");
+		owner.setTelephone("+123456789");
+		owner.setFirstName("John");
+		owner.setLastName("Doe");
+		owner.setId(101);
 		Set<Pet> pets = new HashSet<>();
 		pets.add(dog);
 		pets.add(cat);
 		pets.add(duck);
 		owner.setPetsInternal(pets);
 	}
+
 	@Test
 	public void Empty_pet_internals_are_returned_correctly() {
 		owner = new Owner();
