@@ -1,7 +1,7 @@
 package org.springframework.samples.petclinic.owner;
 
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.mockito.Mock;
@@ -33,5 +33,20 @@ public class PetServiceTest {
 		cache = mock(PetTimedCache.class);
 		Logger logger = LoggerFactory.getLogger("TEST");
 		petService = new PetService(cache, ownerRepository, logger);
+	}
+
+
+	@BeforeAll
+	public void initialize() {
+		dog = new Pet();
+		cat = new Pet();
+		hamster = new Pet();
+		bunny = new Pet();
+		parrot = new Pet();
+		when(cache.get(2)).thenReturn(dog);
+		when(cache.get(17)).thenReturn(cat);
+		when(cache.get(29)).thenReturn(parrot);
+		when(cache.get(6)).thenReturn(bunny);
+		when(cache.get(10)).thenReturn(hamster);
 	}
 }
