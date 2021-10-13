@@ -6,9 +6,6 @@ import org.junit.experimental.theories.Theory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.springframework.samples.petclinic.visit.Visit;
-
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,12 +21,16 @@ public class OwnerTest {
 		dog = new Pet();
 		dog.setName("dog");
 		dog.setId(101);
+
 		cat = new Pet();
 		cat.setName("cat");
+
 		duck = new Pet();
 		duck.setName("duck");
+
 		lama = new Pet();
 		lama.setName("lama");
+
 		owner = new Owner();
 		owner.setAddress("123 Main Street");
 		owner.setCity("New York");
@@ -37,11 +38,37 @@ public class OwnerTest {
 		owner.setFirstName("John");
 		owner.setLastName("Doe");
 		owner.setId(101);
+
 		Set<Pet> pets = new HashSet<>();
 		pets.add(dog);
 		pets.add(cat);
 		pets.add(duck);
 		owner.setPetsInternal(pets);
+	}
+
+	@Test
+	public void Owners_first_name_is_returned_correctly() {
+		assertEquals("John", owner.getFirstName());
+	}
+
+	@Test
+	public void Owners_last_name_is_returned_correctly() {
+		assertEquals("Doe", owner.getLastName());
+	}
+
+	@Test
+	public void Owners_telephone_number_is_returned_correctly() {
+		assertEquals("+123456789", owner.getTelephone());
+	}
+
+	@Test
+	public void Owners_city_is_returned_correctly() {
+		assertEquals("New York", owner.getCity());
+	}
+
+	@Test
+	public void Owners_address_is_returned_correctly() {
+		assertEquals("123 Main Street", owner.getAddress());
 	}
 
 	@Test
