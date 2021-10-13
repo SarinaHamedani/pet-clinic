@@ -1,17 +1,24 @@
 package org.springframework.samples.petclinic.owner;
 
+import org.junit.experimental.theories.DataPoint;
+import org.junit.experimental.theories.Theories;
+import org.junit.experimental.theories.Theory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.samples.petclinic.visit.Visit;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-class OwnerTest {
-	Owner owner;
-	Pet dog, cat, duck, lama;
+@RunWith(Theories.class)
+public class OwnerTest {
+	private static Owner owner;
+	private static Pet dog, cat, duck, lama;
 	@BeforeEach
 	void setUp() {
 		dog = new Pet();
@@ -79,5 +86,33 @@ class OwnerTest {
 	@Test
 	public void Null_is_returned_if_name_does_not_exist_in_owners_pets_internal() {
 		assertThat(owner.getPet("Seal")).isNull();
+	}
+
+	@DataPoint
+	public static Set<Pet> petsOutOfOrder() {
+		Set<Pet> pets = new HashSet<>();
+		pets.add(dog);
+		pets.add(cat);
+		pets.add(lama);
+		return pets;
+	}
+
+	@DataPoint
+	public static Set<Pet> petsInOrder() {
+		Set<Pet> pets = new HashSet<>();
+		pets.add(cat);
+		pets.add(dog);
+		pets.add(duck);
+		pets.add(lama);
+		return pets;
+	}
+
+	@DataPoint
+	public static Set<Pet> petsInReverseOrder() {
+		Set<Pet> pets = new HashSet<>();
+		pets.add(duck);
+		pets.add(dog);
+		pets.add(cat);
+		return pets;
 	}
 }
