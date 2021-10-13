@@ -49,4 +49,16 @@ public class PetServiceTest {
 		when(cache.get(6)).thenReturn(bunny);
 		when(cache.get(10)).thenReturn(hamster);
 	}
+
+
+	@Parameterized.Parameters
+	public static Collection pets() {
+		return Arrays.asList(new Object[][] {
+			{ 2, dog },
+			{ 6, bunny },
+			{ 29, parrot },
+			{ 17, cat },
+			{ 10, hamster }
+		});
+	}
 }
