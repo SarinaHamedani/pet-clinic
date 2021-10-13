@@ -115,4 +115,11 @@ public class OwnerTest {
 		pets.add(cat);
 		return pets;
 	}
+
+	@Theory
+	public void Pets_are_sorted_returned_by_name(Set<Pet> pets) {
+		owner.setPetsInternal(pets);
+		List<String> actual = owner.getPets().stream().map(Pet::getName).collect(Collectors.toList());
+		assertThat(actual).isSortedAccordingTo(Comparator.naturalOrder());
+	}
 }
