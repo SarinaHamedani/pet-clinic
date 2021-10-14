@@ -108,8 +108,13 @@ public class OwnerTest {
 	}
 
 	@Test
-	public void Pet_without_id_and_specific_case_insensitive_name_is_not_returned() {
+	public void New_pets_with_specific_case_insensitive_names_are_excluded_when_ignore_new_is_enabled() {
 		assertThat(owner.getPet("CaT", true)).isNull();
+	}
+
+	@Test
+	public void New_pets_with_specific_case_insensitive_names_are_included_when_ignore_new_is_disabled() {
+		assertThat(owner.getPet("CaT", false)).isEqualTo(cat);
 	}
 
 	@Test
@@ -151,7 +156,7 @@ public class OwnerTest {
 	}
 
 	@Theory
-	public void Pets_are_sorted_returned_by_name(Set<Pet> pets) {
+	public void Pets_are_sorted_by_name_correctly(Set<Pet> pets) {
 		owner.setPetsInternal(pets);
 		List<String> actual = owner.getPets().stream().map(Pet::getName).collect(Collectors.toList());
 		assertThat(actual).isSortedAccordingTo(Comparator.naturalOrder());
