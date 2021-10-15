@@ -131,7 +131,7 @@ public class OwnerTest {
 	}
 
 	@DataPoints
-	public static Set<Pet>[] petsOutOfOrder() {
+	public static Set<Pet>[] petsSet() {
 		Set<Pet> pets1 = Stream.of(dog, cat, lama).collect(Collectors.toCollection(HashSet::new));
 		Set<Pet> pets2 = Stream.of(cat, dog, duck, lama).collect(Collectors.toCollection(HashSet::new));
 		Set<Pet> pets3 = Stream.of(duck, dog, cat).collect(Collectors.toCollection(HashSet::new));

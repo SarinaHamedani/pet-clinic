@@ -2,17 +2,18 @@ package org.springframework.samples.petclinic.owner;
 
 import org.junit.BeforeClass;
 import org.junit.experimental.theories.DataPoint;
+import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theory;
 
 import org.junit.experimental.theories.Theories;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.runner.RunWith;
 import org.springframework.samples.petclinic.visit.Visit;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,36 +40,18 @@ public class PetTest {
 		visit4.setDate(date4);
 	}
 
-	@DataPoint
-	public static List<Visit> visitsInOrder() {
-		List<Visit> visits = new ArrayList<>();
-		visits.add(visit1);
-		visits.add(visit2);
-		visits.add(visit3);
-		return visits;
-	}
-
-	@DataPoint
-	public static List<Visit> visitsInReverseOrder() {
-		List<Visit> visits = new ArrayList<>();
-		visits.add(visit5);
-		visits.add(visit3);
-		visits.add(visit2);
-		return visits;
-	}
-
-	@DataPoint
-	public static List<Visit> visitsWithNoOrder() {
-		List<Visit> visits = new ArrayList<>();
-		visits.add(visit4);
-		visits.add(visit5);
-		visits.add(visit1);
-		return visits;
+	@DataPoints
+	public static List<Visit>[] visitsList() {
+		List<Visit> visits1 = Stream.of(visit1, visit2, visit3).collect(Collectors.toList());
+		List<Visit> visits2 = Stream.of(visit5, visit3, visit2).collect(Collectors.toList());
+		List<Visit> visits3 = Stream.of(visit4, visit5, visit1).collect(Collectors.toList());
+		return new List[]{visits1, visits2, visits3};
 	}
 
 	@Theory
 	public void Pets_visits_are_sorted_correctly_according_by_most_recent_date(List<Visit> visits) {
 		Pet p = new Pet();
+		Assumptions.assumeTrue(visits != null);
 		visits.forEach(p::addVisit);
 		List<LocalDate> actual = p.getVisits().stream().map(Visit::getDate).collect(Collectors.toList());
 		assertThat(actual).isSortedAccordingTo(Comparator.reverseOrder());
