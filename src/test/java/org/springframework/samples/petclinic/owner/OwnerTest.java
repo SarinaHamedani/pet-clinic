@@ -93,8 +93,13 @@ public class OwnerTest {
 	@Test
 	public void New_pets_are_added_correctly() {
 		owner.addPet(lama);
-		assertThat(lama.getOwner()).isEqualTo(owner);
 		assertThat(owner.getPetsInternal()).hasSize(4);
+	}
+
+	@Test
+	public void Pets_owner_is_set_correctly_when_added_to_owner() {
+		owner.addPet(lama);
+		assertThat(lama.getOwner()).isEqualTo(owner);
 	}
 
 	@Test
@@ -103,6 +108,13 @@ public class OwnerTest {
 		owner.addPet(lama);
 		assertThat(lama.getOwner()).isEqualTo(owner);
 		assertThat(owner.getPetsInternal()).hasSize(3);
+	}
+
+	@Test
+	public void Old_pets_owner_is_set_correctly_when_added_to_owner() {
+		lama.setId(133);
+		owner.addPet(lama);
+		assertThat(lama.getOwner()).isEqualTo(owner);
 	}
 
 	@Test
@@ -144,7 +156,6 @@ public class OwnerTest {
 		Assumptions.assumeTrue(pets != null);
 		owner.setPetsInternal(pets);
 		List<String> actual = owner.getPets().stream().map(Pet::getName).collect(Collectors.toList());
-		System.out.println(actual);
 		assertThat(actual).isSortedAccordingTo(Comparator.naturalOrder());
 	}
 }
