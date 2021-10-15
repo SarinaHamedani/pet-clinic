@@ -1,13 +1,16 @@
 package org.springframework.samples.petclinic.owner;
 
-import org.junit.experimental.theories.DataPoint;
+import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -127,38 +130,21 @@ public class OwnerTest {
 		assertThat(owner.getPet("Seal")).isNull();
 	}
 
-	@DataPoint
-	public static Set<Pet> petsOutOfOrder() {
-		Set<Pet> pets = new HashSet<>();
-		pets.add(dog);
-		pets.add(cat);
-		pets.add(lama);
-		return pets;
+	@DataPoints
+	public static Set<Pet>[] petsOutOfOrder() {
+		Set<Pet> pets1 = Stream.of(dog, cat, lama).collect(Collectors.toCollection(HashSet::new));
+		Set<Pet> pets2 = Stream.of(cat, dog, duck, lama).collect(Collectors.toCollection(HashSet::new));
+		Set<Pet> pets3 = Stream.of(duck, dog, cat).collect(Collectors.toCollection(HashSet::new));
+		return new Set[]{pets1, pets2, pets3};
 	}
 
-	@DataPoint
-	public static Set<Pet> petsInOrder() {
-		Set<Pet> pets = new HashSet<>();
-		pets.add(cat);
-		pets.add(dog);
-		pets.add(duck);
-		pets.add(lama);
-		return pets;
-	}
-
-	@DataPoint
-	public static Set<Pet> petsInReverseOrder() {
-		Set<Pet> pets = new HashSet<>();
-		pets.add(duck);
-		pets.add(dog);
-		pets.add(cat);
-		return pets;
-	}
 
 	@Theory
 	public void Pets_are_sorted_by_name_correctly(Set<Pet> pets) {
+		Assumptions.assumeTrue(pets != null);
 		owner.setPetsInternal(pets);
 		List<String> actual = owner.getPets().stream().map(Pet::getName).collect(Collectors.toList());
+		System.out.println(actual);
 		assertThat(actual).isSortedAccordingTo(Comparator.naturalOrder());
 	}
 }
