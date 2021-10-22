@@ -54,5 +54,18 @@ class PetManagerTest {
 		verify(owner).addPet(pet);
 	}
 
+	@Test
+	public void Pet_is_found_in_cache_and_returned_correctly() {
+		Pet pet = mock(Pet.class);
+		when(petTimedCache.get(123)).thenReturn(pet);
+		assertEquals(petManager.findPet(123), pet);
+		verify(logger).info("find pet by id {}", 123);
+	}
 
+	@Test
+	public void Null_is_returned_if_pet_does_not_exist_in_cache() {
+		assertNull(petManager.findPet(124));
+		verify(petTimedCache).get(124);
+		verify(logger).info("find pet by id {}", 124);
+	}
 }
