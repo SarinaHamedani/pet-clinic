@@ -38,6 +38,13 @@ class PetManagerTest {
 		verify(logger).info("find owner {}", 1700);
 	}
 
+	@Test
+	public void Null_is_returned_if_owner_does_not_exist_in_repository() {
+		assertNull(petManager.findOwner(801));
+		verify(ownerRepository).findById(801);
+		verify(logger).info("find owner {}", 801);
+	}
+
 
 	// Owner is used as spy
 	@Test
