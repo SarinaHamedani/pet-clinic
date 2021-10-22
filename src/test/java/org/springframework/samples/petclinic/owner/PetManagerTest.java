@@ -29,4 +29,12 @@ class PetManagerTest {
 		this.petManager = new PetManager(petTimedCache, ownerRepository, logger);
 	}
 
+	@Test
+	public void Owner_is_found_in_repository_and_returned_correctly() {
+		Owner owner = mock(Owner.class);
+		when(ownerRepository.findById(1700)).thenReturn(owner);
+		assertEquals(petManager.findOwner(1700), owner);
+		verify(ownerRepository).findById(1700);
+		verify(logger).info("find owner {}", 1700);
+	}
 }
