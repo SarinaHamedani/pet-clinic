@@ -37,4 +37,15 @@ class PetManagerTest {
 		verify(ownerRepository).findById(1700);
 		verify(logger).info("find owner {}", 1700);
 	}
+
+
+	// Owner is used as spy
+	@Test
+	public void New_pet_is_added_to_owner_correctly() {
+		Owner owner = mock(Owner.class);
+		Pet pet = petManager.newPet(owner);
+		verify(owner).addPet(pet);
+	}
+
+
 }
