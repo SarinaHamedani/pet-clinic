@@ -1,5 +1,7 @@
 package org.springframework.samples.petclinic.owner;
 
+import org.aspectj.lang.annotation.Before;
+import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,10 +27,30 @@ class PetManagerTest {
 	@MockBean
 	private Logger logger;
 	private PetManager petManager;
+	private Pet poodle, kitten, monkey, hamster;
 
-	@BeforeEach
+	@BeforeClass
 	public void initialize() {
 		this.petManager = new PetManager(petTimedCache, ownerRepository, logger);
+		poodle = new Pet();
+		PetType dogs = new PetType();
+		dogs.setName("dogs");
+		poodle.setType(dogs);
+
+		kitten = new Pet();
+		PetType cats = new PetType();
+		cats.setName("cats");
+		kitten.setType(cats);
+
+		monkey = new Pet();
+		PetType monkeys = new PetType();
+		monkeys.setName("monkeys");
+		monkey.setType(monkeys);
+
+		hamster = new Pet();
+		PetType mouse = new PetType();
+		mouse.setName("rats and mouse");
+		hamster.setType(mouse);
 	}
 
 	@Test
@@ -101,5 +123,19 @@ class PetManagerTest {
 		assertThrows(NullPointerException.class, () -> petManager.getOwnerPets(952));
 		verify(ownerRepository).findById(952);
 		verify(logger).info("finding the owner's pets by id {}", 952);
+	}
+
+	@Test
+	public void Owners_pet_types_are_returned_correctly() {
+		Owner owner = mock(Owner.class);
+		Pet pet1 = new Pet();
+		Pet pet2 = mock(Pet.class);
+		Pet pet3 = mock(Pet.class);
+		when(ownerRepository.findById(912)).thenReturn(owner);
+		when(owner.getPets()).thenReturn(List.of(pet1, pet2, pet3));
+		assertEquals(petManager.getOwnerPets(912), List.of(pet1, pet2, pet3));
+		verify(ownerRepository).findById(912);
+		verify(owner).getPets();
+		verify(logger).info("finding the owner's pets by id {}", 912);
 	}
 }
