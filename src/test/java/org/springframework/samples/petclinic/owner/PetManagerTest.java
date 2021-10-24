@@ -11,6 +11,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.samples.petclinic.utility.PetTimedCache;
 import org.springframework.samples.petclinic.utility.SimpleDI;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -78,5 +80,26 @@ class PetManagerTest {
 		verify(owner).addPet(pet);
 		verify(petTimedCache).save(pet);
 		verify(logger).info("save pet {}", 125);
+	}
+
+	@Test
+	public void Owners_pets_are_returned_correctly() {
+		Owner owner = mock(Owner.class);
+		Pet pet1 = mock(Pet.class);
+		Pet pet2 = mock(Pet.class);
+		Pet pet3 = mock(Pet.class);
+		when(ownerRepository.findById(912)).thenReturn(owner);
+		when(owner.getPets()).thenReturn(List.of(pet1, pet2, pet3));
+		assertEquals(petManager.getOwnerPets(912), List.of(pet1, pet2, pet3));
+		verify(ownerRepository).findById(912);
+		verify(owner).getPets();
+		verify(logger).info("finding the owner's pets by id {}", 912);
+	}
+
+	@Test
+	public void Exception_is_thrown_if_owner_does_not_exist() {
+		assertThrows(NullPointerException.class, () -> petManager.getOwnerPets(952));
+		verify(ownerRepository).findById(952);
+		verify(logger).info("finding the owner's pets by id {}", 952);
 	}
 }
