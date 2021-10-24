@@ -12,7 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.samples.petclinic.utility.PetTimedCache;
 import org.springframework.samples.petclinic.utility.SimpleDI;
+import org.springframework.samples.petclinic.visit.Visit;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -108,9 +110,6 @@ class PetManagerTest {
 	@Test
 	public void Owners_pets_are_returned_correctly() {
 		Owner owner = mock(Owner.class);
-		Pet pet1 = mock(Pet.class);
-		Pet pet2 = mock(Pet.class);
-		Pet pet3 = mock(Pet.class);
 		when(ownerRepository.findById(912)).thenReturn(owner);
 		when(owner.getPets()).thenReturn(List.of(poodle, kitten, hamster));
 		assertEquals(petManager.getOwnerPets(912), List.of(poodle, kitten, hamster));
@@ -135,5 +134,30 @@ class PetManagerTest {
 		verify(ownerRepository).findById(939);
 		verify(owner).getPets();
 		verify(logger).info("finding the owner's petTypes by id {}", 939);
+	}
+
+	@Test
+	public void Pets_visits_in_a_date_range_are_returned_correctly() {
+		Pet pet = mock(Pet.class);
+		Visit visit1 = mock(Visit.class);
+		Visit visit2 = mock(Visit.class);
+		Visit visit3 = mock(Visit.class);
+		LocalDate start = LocalDate.of(2021, 1, 1);
+		LocalDate end = LocalDate.of(2021, 3, 20);
+		when(petTimedCache.get(53)).thenReturn(pet);
+		when(pet.getVisitsBetween(start, end)).thenReturn(List.of(visit1, visit2, visit3));
+		assertEquals(petManager.getVisitsBetween(53, start, end), List.of(visit1, visit2, visit3));
+		verify(petTimedCache).get(53);
+		verify(pet).getVisitsBetween(start, end);
+		verify(logger).info("get visits for pet {} from {} since {}", 53, start, end);
+	}
+
+	@Test
+	public void Exception_is_thrown_if_pet_is_not_found_to_get_visits_for() {
+		LocalDate start = LocalDate.of(2021, 1, 1);
+		LocalDate end = LocalDate.of(2021, 3, 20);
+		assertThrows(NullPointerException.class, () -> petManager.getVisitsBetween(100, start, end));
+		verify(petTimedCache).get(100);
+		verify(logger).info("get visits for pet {} from {} since {}", 100, start, end);
 	}
 }
