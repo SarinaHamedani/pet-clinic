@@ -14,6 +14,7 @@ import org.springframework.samples.petclinic.utility.PetTimedCache;
 import org.springframework.samples.petclinic.utility.SimpleDI;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -28,29 +29,30 @@ class PetManagerTest {
 	private Logger logger;
 	private PetManager petManager;
 	private Pet poodle, kitten, monkey, hamster;
+	private PetType dogs, cats, monkeys, mice;
 
-	@BeforeClass
+	@BeforeEach
 	public void initialize() {
 		this.petManager = new PetManager(petTimedCache, ownerRepository, logger);
 		poodle = new Pet();
-		PetType dogs = new PetType();
+		dogs = new PetType();
 		dogs.setName("dogs");
 		poodle.setType(dogs);
 
 		kitten = new Pet();
-		PetType cats = new PetType();
+		cats = new PetType();
 		cats.setName("cats");
 		kitten.setType(cats);
 
 		monkey = new Pet();
-		PetType monkeys = new PetType();
+		monkeys = new PetType();
 		monkeys.setName("monkeys");
 		monkey.setType(monkeys);
 
 		hamster = new Pet();
-		PetType mouse = new PetType();
-		mouse.setName("rats and mouse");
-		hamster.setType(mouse);
+		mice = new PetType();
+		mice.setName("rats and mouse");
+		hamster.setType(mice);
 	}
 
 	@Test
@@ -80,9 +82,8 @@ class PetManagerTest {
 
 	@Test
 	public void Pet_is_found_in_cache_and_returned_correctly() {
-		Pet pet = mock(Pet.class);
-		when(petTimedCache.get(123)).thenReturn(pet);
-		assertEquals(petManager.findPet(123), pet);
+		when(petTimedCache.get(123)).thenReturn(poodle);
+		assertEquals(petManager.findPet(123), poodle);
 		verify(logger).info("find pet by id {}", 123);
 	}
 
@@ -111,8 +112,8 @@ class PetManagerTest {
 		Pet pet2 = mock(Pet.class);
 		Pet pet3 = mock(Pet.class);
 		when(ownerRepository.findById(912)).thenReturn(owner);
-		when(owner.getPets()).thenReturn(List.of(pet1, pet2, pet3));
-		assertEquals(petManager.getOwnerPets(912), List.of(pet1, pet2, pet3));
+		when(owner.getPets()).thenReturn(List.of(poodle, kitten, hamster));
+		assertEquals(petManager.getOwnerPets(912), List.of(poodle, kitten, hamster));
 		verify(ownerRepository).findById(912);
 		verify(owner).getPets();
 		verify(logger).info("finding the owner's pets by id {}", 912);
@@ -128,14 +129,11 @@ class PetManagerTest {
 	@Test
 	public void Owners_pet_types_are_returned_correctly() {
 		Owner owner = mock(Owner.class);
-		Pet pet1 = new Pet();
-		Pet pet2 = mock(Pet.class);
-		Pet pet3 = mock(Pet.class);
-		when(ownerRepository.findById(912)).thenReturn(owner);
-		when(owner.getPets()).thenReturn(List.of(pet1, pet2, pet3));
-		assertEquals(petManager.getOwnerPets(912), List.of(pet1, pet2, pet3));
-		verify(ownerRepository).findById(912);
+		when(ownerRepository.findById(939)).thenReturn(owner);
+		when(owner.getPets()).thenReturn(List.of(poodle, kitten, monkey, hamster));
+		assertEquals(petManager.getOwnerPetTypes(939), Set.of(dogs, cats, monkeys, mice));
+		verify(ownerRepository).findById(939);
 		verify(owner).getPets();
-		verify(logger).info("finding the owner's pets by id {}", 912);
+		verify(logger).info("finding the owner's petTypes by id {}", 939);
 	}
 }
