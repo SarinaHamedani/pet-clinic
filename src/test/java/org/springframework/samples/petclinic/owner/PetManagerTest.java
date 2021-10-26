@@ -57,15 +57,25 @@ class PetManagerTest {
 		hamster.setType(mice);
 	}
 
+	// Stub, State verification, Mockisty
 	@Test
 	public void Owner_is_found_in_repository_and_returned_correctly() {
 		Owner owner = mock(Owner.class);
 		when(ownerRepository.findById(1700)).thenReturn(owner);
 		assertEquals(petManager.findOwner(1700), owner);
+	}
+
+	// Spy, Behaviour verification, Mockisty
+	@Test
+	public void Owner_is_found_in_repository_and_logged_correctly() {
+		Owner owner = mock(Owner.class);
+		when(ownerRepository.findById(1700)).thenReturn(owner);
+		petManager.findOwner(1700);
 		verify(ownerRepository).findById(1700);
 		verify(logger).info("find owner {}", 1700);
 	}
 
+	// Spy, Behaviour verification, Mockisty
 	@Test
 	public void Null_is_returned_if_owner_does_not_exist_in_repository() {
 		assertNull(petManager.findOwner(801));
@@ -73,8 +83,7 @@ class PetManagerTest {
 		verify(logger).info("find owner {}", 801);
 	}
 
-
-	// Owner is used as spy
+	// Spy, Behaviour verification, Mockisty
 	@Test
 	public void New_pet_is_added_to_owner_correctly() {
 		Owner owner = mock(Owner.class);
@@ -82,13 +91,22 @@ class PetManagerTest {
 		verify(owner).addPet(pet);
 	}
 
+	// Stub, State verification, Mockisty
 	@Test
 	public void Pet_is_found_in_cache_and_returned_correctly() {
 		when(petTimedCache.get(123)).thenReturn(poodle);
 		assertEquals(petManager.findPet(123), poodle);
+	}
+
+	// Spy, Behaviour verification, Mockisty
+	@Test
+	public void Pet_is_found_in_cache_and_logged_correctly() {
+		when(petTimedCache.get(123)).thenReturn(poodle);
+		petManager.findPet(123);
 		verify(logger).info("find pet by id {}", 123);
 	}
 
+	// Spy, Behaviour verification, Mockisty
 	@Test
 	public void Null_is_returned_if_pet_does_not_exist_in_cache() {
 		assertNull(petManager.findPet(124));
@@ -96,6 +114,7 @@ class PetManagerTest {
 		verify(logger).info("find pet by id {}", 124);
 	}
 
+	// Spy, Behaviour verification, Mockisty
 	@Test
 	public void Pet_is_added_to_owner_and_saved_in_cache_correctly() {
 		Owner owner = mock(Owner.class);
@@ -107,17 +126,28 @@ class PetManagerTest {
 		verify(logger).info("save pet {}", 125);
 	}
 
+	// Stub, State verification, Mockisty
 	@Test
 	public void Owners_pets_are_returned_correctly() {
 		Owner owner = mock(Owner.class);
 		when(ownerRepository.findById(912)).thenReturn(owner);
 		when(owner.getPets()).thenReturn(List.of(poodle, kitten, hamster));
 		assertEquals(petManager.getOwnerPets(912), List.of(poodle, kitten, hamster));
+	}
+
+	// Spy, Behaviour verification, Mockisty
+	@Test
+	public void Owners_pets_are_logged_correctly() {
+		Owner owner = mock(Owner.class);
+		when(ownerRepository.findById(912)).thenReturn(owner);
+		when(owner.getPets()).thenReturn(List.of(poodle, kitten, hamster));
+		petManager.getOwnerPets(912);
 		verify(ownerRepository).findById(912);
 		verify(owner).getPets();
 		verify(logger).info("finding the owner's pets by id {}", 912);
 	}
 
+	// Spy, Behaviour verification, Mockisty
 	@Test
 	public void Exception_is_thrown_if_owner_does_not_exist() {
 		assertThrows(NullPointerException.class, () -> petManager.getOwnerPets(952));
@@ -125,17 +155,16 @@ class PetManagerTest {
 		verify(logger).info("finding the owner's pets by id {}", 952);
 	}
 
+	// Stub, State verification, Mockisty
 	@Test
 	public void Owners_pet_types_are_returned_correctly() {
 		Owner owner = mock(Owner.class);
 		when(ownerRepository.findById(939)).thenReturn(owner);
 		when(owner.getPets()).thenReturn(List.of(poodle, kitten, monkey, hamster));
 		assertEquals(petManager.getOwnerPetTypes(939), Set.of(dogs, cats, monkeys, mice));
-		verify(ownerRepository).findById(939);
-		verify(owner).getPets();
-		verify(logger).info("finding the owner's petTypes by id {}", 939);
 	}
 
+	// Stub, State verification, Mockisty
 	@Test
 	public void Pets_visits_in_a_date_range_are_returned_correctly() {
 		Pet pet = mock(Pet.class);
@@ -147,11 +176,9 @@ class PetManagerTest {
 		when(petTimedCache.get(53)).thenReturn(pet);
 		when(pet.getVisitsBetween(start, end)).thenReturn(List.of(visit1, visit2, visit3));
 		assertEquals(petManager.getVisitsBetween(53, start, end), List.of(visit1, visit2, visit3));
-		verify(petTimedCache).get(53);
-		verify(pet).getVisitsBetween(start, end);
-		verify(logger).info("get visits for pet {} from {} since {}", 53, start, end);
 	}
 
+	// Spy, Behaviour verification, Mockisty
 	@Test
 	public void Exception_is_thrown_if_pet_is_not_found_to_get_visits_for() {
 		LocalDate start = LocalDate.of(2021, 1, 1);
