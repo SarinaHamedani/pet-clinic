@@ -256,4 +256,26 @@ public class CustomerDependentPriceCalculatorTest {
 			0.01);
 	}
 
+	@Test
+	public void basePricePerPetMultipliedByInfantCoefficientPlusBaseChargeIsUsedForInfantPets() {
+		CustomerDependentPriceCalculator priceCalculator = new CustomerDependentPriceCalculator();
+		this.setUp();
+		UserType userType = UserType.NEW;
+		List<Pet> pets = new ArrayList<>();
+		Pet pet = new Pet();
+		pet.setBirthDate(new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime());
+		PetType petType = mock(PetType.class);
+		pet.setType(petType);
+		when(petType.getRare()).thenReturn(false);
+		p1.setBirthDate(new Date());
+		p2.setBirthDate(new Date());
+		pets.add(pet);
+		pets.add(p1);
+		pets.add(p2);
+		assertEquals(
+			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
+			13.07,
+			0.01);
+	}
+
 }
