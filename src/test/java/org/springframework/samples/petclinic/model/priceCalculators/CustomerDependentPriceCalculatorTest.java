@@ -54,8 +54,8 @@ public class CustomerDependentPriceCalculatorTest {
 		UserType userType = UserType.NEW;
 		List<Pet> pets = new ArrayList<>();
 		assertEquals(
-			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			0,
+			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			0.01);
 	}
 
@@ -65,8 +65,8 @@ public class CustomerDependentPriceCalculatorTest {
 		UserType userType = UserType.SILVER;
 		List<Pet> pets = new ArrayList<>();
 		assertEquals(
-			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			0,
+			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			0.01);
 	}
 
@@ -76,8 +76,8 @@ public class CustomerDependentPriceCalculatorTest {
 		UserType userType = UserType.GOLD;
 		List<Pet> pets = new ArrayList<>();
 		assertEquals(
-			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			15,
+			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			0.01);
 	}
 
@@ -98,8 +98,8 @@ public class CustomerDependentPriceCalculatorTest {
 		pets.add(p9);
 		pets.add(p10);
 		assertEquals(
-			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			49.2,
+			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			0.01);
 	}
 
@@ -115,8 +115,8 @@ public class CustomerDependentPriceCalculatorTest {
 		pets.add(p4);
 		pets.add(p5);
 		assertEquals(
-			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			18,
+			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			0.01);
 	}
 
@@ -132,8 +132,8 @@ public class CustomerDependentPriceCalculatorTest {
 		pets.add(p4);
 		pets.add(p5);
 		assertEquals(
-			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			29.4,
+			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			0.01);
 	}
 
@@ -154,8 +154,8 @@ public class CustomerDependentPriceCalculatorTest {
 		pets.add(p9);
 		pets.add(p10);
 		assertEquals(
-			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			40.8,
+			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			0.01);
 	}
 
@@ -176,8 +176,8 @@ public class CustomerDependentPriceCalculatorTest {
 		pets.add(p4);
 		pets.add(p5);
 		assertEquals(
-			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			38.94,
+			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			0.01);
 	}
 
@@ -198,8 +198,8 @@ public class CustomerDependentPriceCalculatorTest {
 		pets.add(p4);
 		pets.add(p5);
 		assertEquals(
-			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			32.16,
+			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			0.01);
 	}
 
@@ -227,8 +227,8 @@ public class CustomerDependentPriceCalculatorTest {
 		pets.add(p8);
 		pets.add(p9);
 		assertEquals(
-			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			43.10,
+			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			0.01);
 	}
 
@@ -251,8 +251,8 @@ public class CustomerDependentPriceCalculatorTest {
 		pets.add(p3);
 		pets.add(p4);
 		assertEquals(
-			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			31.70,
+			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			0.01);
 	}
 
@@ -273,8 +273,8 @@ public class CustomerDependentPriceCalculatorTest {
 		pets.add(p1);
 		pets.add(p2);
 		assertEquals(
-			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			13.07,
+			priceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			0.01);
 	}
 
