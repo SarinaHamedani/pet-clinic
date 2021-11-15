@@ -20,8 +20,8 @@ public class SimplePriceCalculatorTest {
 		UserType userType = UserType.GOLD;
 		List<Pet> pets = new ArrayList<>();
 		assertEquals(
-			simplePriceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			15,
+			simplePriceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			0.01);
 	}
 
@@ -31,8 +31,8 @@ public class SimplePriceCalculatorTest {
 		UserType userType = UserType.NEW;
 		List<Pet> pets = new ArrayList<>();
 		assertEquals(
-			simplePriceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			14.25,
+			simplePriceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			0.01);
 	}
 
@@ -48,8 +48,8 @@ public class SimplePriceCalculatorTest {
 		pets.add(p1);
 		pets.add(p2);
 		assertEquals(
-			simplePriceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			22.2,
+			simplePriceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			0.01);
 	}
 
@@ -65,8 +65,8 @@ public class SimplePriceCalculatorTest {
 		pets.add(p1);
 		pets.add(p2);
 		assertEquals(
-			simplePriceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			21.09,
+			simplePriceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			0.01);
 	}
 
@@ -84,8 +84,8 @@ public class SimplePriceCalculatorTest {
 		pets.add(p2);
 		when(petType.getRare()).thenReturn(false);
 		assertEquals(
-			simplePriceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			21,
+			simplePriceCalculator.calcPrice(pets, 15.0, 3.0, userType),
 			0.01);
 	}
 }
