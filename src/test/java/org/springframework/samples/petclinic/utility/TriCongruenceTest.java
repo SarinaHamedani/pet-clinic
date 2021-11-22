@@ -22,6 +22,13 @@ class TriCongruenceTest {
 		Assertions.assertFalse(areCongruent);
 	}
 
+	/**
+	* p = (a1 != a2) || (b1 != b2) || (c1 != c2)
+	* p = x + y + z [DNF]
+	* x = T y, z = F
+	* a1 != a2, b1 = b2, c1 = c2
+	* */
+
 	@Test
 	public void smallestSidesAreDifferentAndTwoSidesAreEqual() {
 		Triangle t1 = new Triangle(4, 7, 6);
@@ -31,6 +38,11 @@ class TriCongruenceTest {
 		Assertions.assertFalse(areCongruent);
 	}
 
+	/**
+	* y = T x, z = F
+	* b1 != b2, a1 = a2, c1 = c2
+	* */
+
 	@Test
 	public void intermediateSidesAreDifferentAndTwoSidesAreEqual() {
 		Triangle t1 = new Triangle(3, 8, 4);
@@ -39,6 +51,11 @@ class TriCongruenceTest {
 		log.debug("Triangles identified as '{}'.", areCongruent ? "Congruent" : "Not Congruent");
 		Assertions.assertFalse(areCongruent);
 	}
+
+	/**
+	 * z = T x, y = F
+	 * c1 != c2, a1 = a2, b1 = b2
+	 * */
 
 	@Test
 	public void largestSidesAreDifferentAndTwoSidesAreEqual() {
