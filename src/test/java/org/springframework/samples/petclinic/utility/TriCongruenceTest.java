@@ -73,14 +73,17 @@ class TriCongruenceTest {
 	}
 
 	/**
-	 * The following four test methods are designed to ensure clause coverage in line 15 of TriCongruence
+	 * The following four test methods are designed to ensure Clause Coverage (CC)
+	 * and Correlated Active Clause Coverage (CACC) in line 15 of TriCongruence
 	 * p = (a1 < 0) || (a1 + b1 < c1)
 	 * p = x' || y'
 	 * For Clause Coverage each clause must evaluate to true and false
+	 * For Correlated Active Clause Coverage for each major clause in predicate,
+	 * minor clauses force the predicate to evaluate to both true and false
 	 *
-	 *
-	 * x' = T -> a1 < 0
-	 * y' = F -> a1 + b1 >= c1
+	 * Clause Coverage
+	 * x' = T: a1 < 0
+	 * y' = T: a1 + b1 < c1
 	 */
 
 	@Test
@@ -93,8 +96,9 @@ class TriCongruenceTest {
 	}
 
 	/**
-	 * x' = F -> a1 >= 0
-	 * y' = T -> a1 + b1 < c1
+	 * Clause Coverage
+	 * x' = F: a1 >= 0
+	 * y' = T: a1 + b1 < c1
 	 */
 
 	@Test
@@ -107,33 +111,85 @@ class TriCongruenceTest {
 	}
 
 	/**
-	 * x' = T -> a1 < 0
-	 * y' = T -> a1 + b1 < c1
-	 */
-
-	@Test
-	public void trianglesAreNotCongruentWhenSidesAreEqualAndOneSideIsNegativeAndSumOfSmallerSidesAreLessThanLargest() {
-		Triangle t1 = new Triangle(3, 3, -2);
-		Triangle t2 = new Triangle(-2, 3, 3);
-		boolean areCongruent = TriCongruence.areCongruent(t1, t2);
-		log.debug("Triangles identified as '{}'.", areCongruent ? "Congruent" : "Not Congruent");
-		Assertions.assertFalse(areCongruent);
-	}
-
-	/**
+	 * Clause Coverage
+	 * x' = F: a1 >= 0
+	 * y' = F: a1 + b1 >= c1
 	 *
-	 * x' = F -> a1 >= 0
-	 * y' = F -> a1 + b1 >= c1
+	 * Correlated Active Clause Coverage
+	 * Major clause: x'
+	 * Minor clause: y'
+	 * x' = F => y' = F so that ~x' || y' = ~(x' || y')
+	 * x' = F: a1 >= 0
+	 * y' = F: a1 + b1 >= c1
 	 */
-
 	@Test
-	public void trianglesAreCongruentWhenSidesAreEqualAndSmallestSideIsPositiveAndSumOfSmallerSidesAreGreaterThanLargest() {
+	public void trianglesAreCongruentWhenSidesAreEqualAndSmallestSideIsPositiveAndSumOfSmallerSidesAreGreaterThanLargestMajorFirstClauseFalse() {
 		Triangle t1 = new Triangle(4, 3, 5);
 		Triangle t2 = new Triangle(3, 5, 4);
 		boolean areCongruent = TriCongruence.areCongruent(t1, t2);
 		log.debug("Triangles identified as '{}'.", areCongruent ? "Congruent" : "Not Congruent");
 		Assertions.assertTrue(areCongruent);
 	}
+
+	/**
+	* Correlated Active Clause Coverage
+	 * Major clause: y'
+	 * Minor clause: x'
+	 * y' = F => x' = F so that x' || ~y' = ~(x' || y')
+	 * x' = F: a1 >= 0
+	 * y' = F: a1 + b1 >= c1
+	 */
+	@Test
+	public void trianglesAreCongruentWhenSidesAreEqualAndSmallestSideIsPositiveAndSumOfSmallerSidesAreGreaterThanLargestMajorSecondClauseFalse() {
+		Triangle t1 = new Triangle(4, 4.5, 7);
+		Triangle t2 = new Triangle(7, 4, 4.5);
+		boolean areCongruent = TriCongruence.areCongruent(t1, t2);
+		log.debug("Triangles identified as '{}'.", areCongruent ? "Congruent" : "Not Congruent");
+		Assertions.assertTrue(areCongruent);
+	}
+
+	/**
+	 * Correlated Active Clause Coverage
+	 * Major clause: y'
+	 * Minor clause: x'
+	 * y' = T => x' = F so that x' || ~y' = ~(x' || y')
+	 * x' = F: a1 >= 0
+	 * y' = T: a1 + b1 < c1
+	 */
+	@Test
+	public void trianglesAreCongruentWhenSidesAreEqualAndSmallestSideIsPositiveAndSumOfSmallerSidesAreGreaterThanLargestMajorSecondClauseTrue() {
+		Triangle t1 = new Triangle(1.5, 2, 5);
+		Triangle t2 = new Triangle(2, 5, 1.5);
+		boolean areCongruent = TriCongruence.areCongruent(t1, t2);
+		log.debug("Triangles identified as '{}'.", areCongruent ? "Congruent" : "Not Congruent");
+		Assertions.assertFalse(areCongruent);
+	}
+
+
+	/**
+	 * Correlated Active Clause Coverage
+	 * for each major clause in predicate, minor clauses force the predicate to evaluate to both true and false
+	 * p = (a1 < 0) || (a1 + b1 < c1)
+	 * p = x' || y'
+	 *
+	 * Major clause: x'
+	 * Minor clause: y'
+	 * x' = T => y' = F so that ~x' || y' = ~(x' || y')
+	 * x' = T: a1 < 0
+	 * y' = F: a1 + b1 >= c1
+	 */
+//	@Test
+//	public void trianglesAreNotCongruentWhenSidesAreEqualAndSmallestSideIsNegativeAndSumOfSmallerSidesAreGreaterThanLargest() {
+//		Triangle t1 = new Triangle(2.5, 3, 4.5);
+//		Triangle t2 = new Triangle(3, 2.5, 4.5);
+//		boolean areCongruent = TriCongruence.areCongruent(t1, t2);
+//		log.debug("Triangles identified as '{}'.", areCongruent ? "Congruent" : "Not Congruent");
+//		Assertions.assertTrue(areCongruent);
+//	}
+
+
+
+
 
 	/**
 	 * TODO
