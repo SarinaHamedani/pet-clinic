@@ -30,6 +30,16 @@ class TriCongruenceTest {
 	 * b1 = b2
 	 * c1 = c2
 	* */
+	@UniqueTruePoint(
+		predicate = "x + y + z",
+		dnf = "x + y + z",
+		implicant = "x",
+		valuations = {
+			@Valuation(clause = 'x', valuation = true),
+			@Valuation(clause = 'y', valuation = false),
+			@Valuation(clause = 'z', valuation = false)
+		}
+	)
 
 	@Test
 	public void trianglesAreNotCongruentWhenSmallestSidesAreDifferentAndTwoSidesAreEqual() {
@@ -46,6 +56,16 @@ class TriCongruenceTest {
 	 * a1 = a2
 	 * c1 = c2
 	* */
+	@UniqueTruePoint(
+		predicate = "x + y + z",
+		dnf = "x + y + z",
+		implicant = "y",
+		valuations = {
+			@Valuation(clause = 'x', valuation = false),
+			@Valuation(clause = 'y', valuation = true),
+			@Valuation(clause = 'z', valuation = false)
+		}
+	)
 
 	@Test
 	public void trianglesAreNotCongruentWhenIntermediateSidesAreDifferentAndTwoSidesAreEqual() {
@@ -62,6 +82,16 @@ class TriCongruenceTest {
 	 * a1 = a2
 	 * b1 = b2
 	 * */
+	@UniqueTruePoint(
+		predicate = "x + y + z",
+		dnf = "x + y + z",
+		implicant = "z",
+		valuations = {
+			@Valuation(clause = 'x', valuation = false),
+			@Valuation(clause = 'y', valuation = false),
+			@Valuation(clause = 'z', valuation = true)
+		}
+	)
 
 	@Test
 	public void trianglesAreNotCongruentWhenLargestSidesAreDifferentAndTwoSidesAreEqual() {
@@ -70,6 +100,27 @@ class TriCongruenceTest {
 		boolean areCongruent = TriCongruence.areCongruent(t1, t2);
 		log.debug("Triangles identified as '{}'.", areCongruent ? "Congruent" : "Not Congruent");
 		Assertions.assertFalse(areCongruent);
+	}
+
+
+	@NearFalsePoint(
+		predicate = "x + y + z",
+		dnf = "x + y + z",
+		implicant = "x",
+		clause = 'x',
+		valuations = {
+			@Valuation(clause = 'x', valuation = false),
+			@Valuation(clause = 'y', valuation = false),
+			@Valuation(clause = 'z', valuation = false)
+		}
+	)
+	@Test
+	public void trianglesCanBeCongruentWhenAllSidesMatch() {
+		Triangle t1 = new Triangle(3, 5, 4);
+		Triangle t2 = new Triangle(4, 3, 5);
+		boolean areCongruent = TriCongruence.areCongruent(t1, t2);
+		log.debug("Triangles identified as '{}'.", areCongruent ? "Congruent" : "Not Congruent");
+		Assertions.assertTrue(areCongruent);
 	}
 
 	/**
@@ -86,6 +137,13 @@ class TriCongruenceTest {
 	 * y' = T: a1 + b1 < c1
 	 */
 
+	@ClauseCoverage(
+		predicate = "x + y",
+		valuations = {
+			@Valuation(clause = 'x', valuation = true),
+			@Valuation(clause = 'y', valuation = true)
+		}
+	)
 	@Test
 	public void trianglesAreNotCongruentWhenSidesAreEqualAndTheSmallestIsNegative() {
 		Triangle t1 = new Triangle(-1, 5, 4);
@@ -100,7 +158,22 @@ class TriCongruenceTest {
 	 * x' = F: a1 >= 0
 	 * y' = T: a1 + b1 < c1
 	 */
-
+	@ClauseCoverage(
+		predicate = "x + y",
+		valuations = {
+			@Valuation(clause = 'x', valuation = false),
+			@Valuation(clause = 'y', valuation = true)
+		}
+	)
+	@CACC(
+		predicate = "x + y",
+		majorClause = 'y',
+		valuations = {
+			@Valuation(clause = 'x', valuation = false),
+			@Valuation(clause = 'y', valuation = true)
+		},
+		predicateValue = true
+	)
 	@Test
 	public void trianglesAreNotCongruentWhenSidesAreEqualAndSumOfSmallerSidesAreLessThanLargest() {
 		Triangle t1 = new Triangle(3, 5, 9);
@@ -122,6 +195,22 @@ class TriCongruenceTest {
 	 * x' = F: a1 >= 0
 	 * y' = F: a1 + b1 >= c1
 	 */
+	@ClauseCoverage(
+		predicate = "x + y",
+		valuations = {
+			@Valuation(clause = 'x', valuation = false),
+			@Valuation(clause = 'y', valuation = false)
+		}
+	)
+	@CACC(
+		predicate = "x + y",
+		majorClause = 'x',
+		valuations = {
+			@Valuation(clause = 'x', valuation = false),
+			@Valuation(clause = 'y', valuation = false)
+		},
+		predicateValue = false
+	)
 	@Test
 	public void trianglesAreCongruentWhenSidesAreEqualAndSmallestSideIsPositiveAndSumOfSmallerSidesAreGreaterThanLargestMajorFirstClauseFalse() {
 		Triangle t1 = new Triangle(4, 3, 5);
@@ -139,6 +228,15 @@ class TriCongruenceTest {
 	 * x' = F: a1 >= 0
 	 * y' = F: a1 + b1 >= c1
 	 */
+	@CACC(
+		predicate = "x + y",
+		majorClause = 'y',
+		valuations = {
+			@Valuation(clause = 'x', valuation = false),
+			@Valuation(clause = 'y', valuation = false)
+		},
+		predicateValue = false
+	)
 	@Test
 	public void trianglesAreCongruentWhenSidesAreEqualAndSmallestSideIsPositiveAndSumOfSmallerSidesAreGreaterThanLargestMajorSecondClauseFalse() {
 		Triangle t1 = new Triangle(4, 4.5, 7);
@@ -149,55 +247,25 @@ class TriCongruenceTest {
 	}
 
 	/**
-	 * Correlated Active Clause Coverage
-	 * Major clause: y'
-	 * Minor clause: x'
-	 * y' = T => x' = F so that x' || ~y' = ~(x' || y')
-	 * x' = F: a1 >= 0
-	 * y' = T: a1 + b1 < c1
-	 */
-	@Test
-	public void trianglesAreCongruentWhenSidesAreEqualAndSmallestSideIsPositiveAndSumOfSmallerSidesAreGreaterThanLargestMajorSecondClauseTrue() {
-		Triangle t1 = new Triangle(1.5, 2, 5);
-		Triangle t2 = new Triangle(2, 5, 1.5);
-		boolean areCongruent = TriCongruence.areCongruent(t1, t2);
-		log.debug("Triangles identified as '{}'.", areCongruent ? "Congruent" : "Not Congruent");
-		Assertions.assertFalse(areCongruent);
-	}
-
-
-	/**
-	 * Correlated Active Clause Coverage
-	 * for each major clause in predicate, minor clauses force the predicate to evaluate to both true and false
-	 * p = (a1 < 0) || (a1 + b1 < c1)
-	 * p = x' || y'
+	 * To achieve CUTPNFP coverage, we must include one unique true point per clause in the predicate
+	 * however, for UTPC coverage, we must include a unique true point for each implicant in the predicate
+	 * and its negation
+	 * For example if we consider the predicate f as:
+	 * f = ab + cd
+	 * Unique True Points for ab: { TTFF, TTFT, TTTF }
+	 * Unique True Points for cd: { FFTT, FTTT, TFTT }
+	 * Near False Point for a: (TTFF, FTFF)
+	 * Near False Point for b: (TTFF, TFFF)
+	 * Near False Point for c: (FFTT, FFFT)
+	 * Near False Point for d: (FFTT, FFTF)
 	 *
-	 * Major clause: x'
-	 * Minor clause: y'
-	 * x' = T => y' = F so that ~x' || y' = ~(x' || y')
-	 * x' = T: a1 < 0
-	 * y' = F: a1 + b1 >= c1
+	 * CUTPNFP: { TTFF, FFTT, TFFF, FTFF, FFTF, FFFT }
+	 * TPC: { TTFF, TTTF, TTFT, TFTT, FFTT, FTTT }
 	 */
-//	@Test
-//	public void trianglesAreNotCongruentWhenSidesAreEqualAndSmallestSideIsNegativeAndSumOfSmallerSidesAreGreaterThanLargest() {
-//		Triangle t1 = new Triangle(2.5, 3, 4.5);
-//		Triangle t2 = new Triangle(3, 2.5, 4.5);
-//		boolean areCongruent = TriCongruence.areCongruent(t1, t2);
-//		log.debug("Triangles identified as '{}'.", areCongruent ? "Congruent" : "Not Congruent");
-//		Assertions.assertTrue(areCongruent);
-//	}
 
-
-
-
-
-	/**
-	 * TODO
-	 * explain your answer here
-	 */
 	private static boolean questionTwo(boolean a, boolean b, boolean c, boolean d, boolean e) {
 		boolean predicate = false;
-//		predicate = a predicate with any number of clauses
+		predicate = (a && b) || (c && d);
 		return predicate;
 	}
 }
