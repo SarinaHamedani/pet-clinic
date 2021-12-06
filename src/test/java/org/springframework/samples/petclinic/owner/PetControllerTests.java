@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.samples.petclinic.utility.PetTimedCache;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -45,12 +46,11 @@ class PetControllerTests {
 		cat.setName("cat");
 		Pet p = new Pet();
 		p.setId(1);
-		Pet pet = new Pet();
-		pet.setId(10);
 		given(petRepository.findPetTypes()).willReturn(Lists.newArrayList(cat));
 		given(petRepository.findById(1)).willReturn(p);
 		given(petService.findOwner(1)).willReturn(owner);
 		given(petService.newPet(owner)).willReturn(p);
+		given(petService.findPet(1)).willReturn(p);
 	}
 
 	@Test
@@ -59,6 +59,7 @@ class PetControllerTests {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(view().name("pets/createOrUpdatePetForm"));
+		verify(petService).newPet(owner);
 	}
 
 	@Test
@@ -82,5 +83,15 @@ class PetControllerTests {
 			.andExpect(model().attributeHasFieldErrorCode("pet", "type", "required"))
 			.andExpect(view().name("pets/createOrUpdatePetForm"));
 	}
+
+	@Test
+	void updatePetFormIsReturnedCorrectly() throws Exception {
+		mvc.perform(get("/owners/1/pets/1/edit")
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(view().name("pets/createOrUpdatePetForm"));
+		verify(petService).findPet(1);
+	}
+
 
 }
