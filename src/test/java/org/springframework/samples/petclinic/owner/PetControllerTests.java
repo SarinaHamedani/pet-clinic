@@ -93,5 +93,23 @@ class PetControllerTests {
 		verify(petService).findPet(1);
 	}
 
+	@Test
+	void updatePetFormIsRedirectedCorrectlyGivenNoErrors() throws Exception {
+		mvc.perform(post("/owners/1/pets/1/edit")
+				.param("name", "sparkles")
+				.param("type", cat.toString())
+				.param("birthDate", "2021-01-11"))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/owners/{ownerId}"));
+	}
 
+	@Test
+	void updatePetFormIsReturnedCorrectlyGivenNoName() throws Exception {
+		mvc.perform(post("/owners/1/pets/1/edit")
+				.param("type", cat.toString())
+				.param("birthDate", "2021-01-11"))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeHasErrors("pet"))
+			.andExpect(view().name("pets/createOrUpdatePetForm"));
+	}
 }
