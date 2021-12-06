@@ -54,7 +54,7 @@ class PetControllerTests {
 	}
 
 	@Test
-	public void testInitCreationForm() throws Exception {
+	public void initCreationFormIsReturnedCorrectly() throws Exception {
 		mvc.perform(get("/owners/1/pets/new")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -62,7 +62,7 @@ class PetControllerTests {
 	}
 
 	@Test
-	void testProcessCreationFormRedirect() throws Exception {
+	void processCreationFormIsRedirectedWhenThereAreNoErrors() throws Exception {
 		mvc.perform(post("/owners/1/pets/new")
 				.param("name", "sparkles")
 				.param("type", cat.toString())
@@ -72,7 +72,7 @@ class PetControllerTests {
 	}
 
 	@Test
-	void testProcessCreationFormHasErrors() throws Exception {
+	void createOrUpdatePetFormIsReturnedWhenPetHasErrors() throws Exception {
 		mvc.perform(post("/owners/1/pets/new")
 				.param("name", "sparkles")
 				.param("birthDate", "2021-01-11"))
