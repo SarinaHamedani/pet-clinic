@@ -9,7 +9,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
-import org.springframework.samples.petclinic.utility.PetTimedCache;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -21,9 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 	value = { PetController.class },
 	includeFilters = {
 	@ComponentScan.Filter(value = PetTypeFormatter.class, type = FilterType.ASSIGNABLE_TYPE),
-	@ComponentScan.Filter(value = PetService.class, type = FilterType.ASSIGNABLE_TYPE),
-	@ComponentScan.Filter(value = LoggerConfig.class, type = FilterType.ASSIGNABLE_TYPE),
-	@ComponentScan.Filter(value = PetTimedCache.class, type = FilterType.ASSIGNABLE_TYPE),
+	@ComponentScan.Filter(value = PetService.class, type = FilterType.ASSIGNABLE_TYPE)
 })
 class PetControllerTests {
 	// TODO
