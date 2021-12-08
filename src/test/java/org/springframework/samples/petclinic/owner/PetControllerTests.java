@@ -12,7 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.samples.petclinic.utility.PetTimedCache;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -81,6 +81,25 @@ class PetControllerTests {
 			.andExpect(model().attributeHasErrors("pet"))
 			.andExpect(model().attributeHasFieldErrors("pet", "type"))
 			.andExpect(model().attributeHasFieldErrorCode("pet", "type", "required"))
+			.andExpect(view().name("pets/createOrUpdatePetForm"));
+	}
+
+	@Test
+	void createOrUpdatePetFormIsReturnedWhenPetNameIsDuplicate() throws Exception {
+		Owner owner = mock(Owner.class);
+		Pet pet = new Pet();
+		pet.setName("whiskers");
+		when(owner.getPet("whiskers", true)).thenReturn(pet);
+		given(petService.findOwner(2)).willReturn(owner);
+
+		mvc.perform(post("/owners/2/pets/new")
+				.param("name", "whiskers")
+				.param("type", cat.toString())
+				.param("birthDate", "2021-01-11"))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeHasErrors("pet"))
+			.andExpect(model().attributeHasFieldErrors("pet", "name"))
+			.andExpect(model().attributeHasFieldErrorCode("pet", "name", "duplicate"))
 			.andExpect(view().name("pets/createOrUpdatePetForm"));
 	}
 
