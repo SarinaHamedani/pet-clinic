@@ -248,10 +248,10 @@
         <version>${pitest.version}</version>
         <configuration>
           <targetClasses>
-            <param>org.springframework.samples.petclinic.owner.VisitController</param>
+            <param>org.springframework.samples.petclinic.utility.PriceCalculator</param>
           </targetClasses>
           <targetTests>
-            <param>org.springframework.samples.petclinic.owner.VisitControllerTests</param>
+            <param>org.springframework.samples.petclinic.utility.PriceCalculatorTest</param>
           </targetTests>
           <mutators>
             <mutator>ROR</mutator>
@@ -319,6 +319,14 @@
             <version>${mockito.version}</version>
           </dependency>
         </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>9</source>
+          <target>9</target>
+        </configuration>
       </plugin>
     </plugins>
   </build>
