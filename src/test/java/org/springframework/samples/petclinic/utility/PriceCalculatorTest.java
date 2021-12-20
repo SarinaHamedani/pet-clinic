@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.utility;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.samples.petclinic.owner.Pet;
 import org.springframework.samples.petclinic.visit.Visit;
@@ -8,11 +9,19 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.time.temporal.ChronoUnit.YEARS;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class PriceCalculatorTest {
+	LocalDate today, fiveYearsAgo;
+
+	@BeforeEach
+	public void setUp() {
+		today = LocalDate.now();
+		fiveYearsAgo = today.minusYears(5);
+		fiveYearsAgo = fiveYearsAgo.minusDays(20);
+	}
 	@Test
 	public void testZeroPetsPriceCalculator() {
 		assertEquals(0, PriceCalculator.calcPrice(new ArrayList<>(), 10, 10));
@@ -69,6 +78,14 @@ class PriceCalculatorTest {
 	}
 
 	@Test
+	public void testMultipleTwoYearOldPetsWithNoVisits() {
+		Pet pet = mock(Pet.class);
+		when(pet.getBirthDate()).thenReturn(LocalDate.of(2019,7,9));
+		when(pet.getVisitsUntilAge(2)).thenReturn(new ArrayList<>());
+		assertEquals(16.8, PriceCalculator.calcPrice(List.of(pet), 10, 10), 0.1);
+	}
+
+	@Test
 	public void testMultipleDifferentAgesPetsWithNoVisits() {
 		Pet infant = mock(Pet.class);
 		Pet mature = mock(Pet.class);
@@ -92,11 +109,25 @@ class PriceCalculatorTest {
 		Pet pet = mock(Pet.class);
 		Visit visit1 = new Visit();
 		Visit visit2 = new Visit();
+		LocalDate today = LocalDate.now();
+		LocalDate past = today.minusYears(5);
 		visit1.setDate(LocalDate.of(2020,12,25));
 		visit2.setDate(LocalDate.of(2020,12,25));
-		when(pet.getBirthDate()).thenReturn(LocalDate.of(2016,7,9));
+		when(pet.getBirthDate()).thenReturn(past);
 		when(pet.getVisitsUntilAge(5)).thenReturn(List.of(visit1, visit2));
 		assertEquals(602, PriceCalculator.calcPrice(List.of(pet, pet, pet, pet, pet, pet, pet, pet, pet, pet), 10, 10));
+	}
+
+	@Test
+	public void test100DayOldLastVisitForDiscount() {
+		Pet pet = mock(Pet.class);
+		Visit visit = new Visit();
+		LocalDate today = LocalDate.now();
+		LocalDate past = today.minusDays(100);
+		visit.setDate(past);
+		when(pet.getBirthDate()).thenReturn(fiveYearsAgo);
+		when(pet.getVisitsUntilAge(5)).thenReturn(List.of(visit, visit));
+		assertEquals(1140, PriceCalculator.calcPrice(List.of(pet, pet, pet, pet, pet, pet, pet, pet, pet, pet, pet), 10, 10));
 	}
 
 	@Test
