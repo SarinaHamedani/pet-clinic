@@ -30,6 +30,6 @@ jobs:
   
     steps:
     - name: Compile Tests
-      run: mvn compiler:testCompile
+      run: cd .. && mvn compiler:testCompile
     - name: BDD Acceptance Testing
       run: mvn -Dtest=”bdd.BDDEntryPointAcceptanceTest”test
