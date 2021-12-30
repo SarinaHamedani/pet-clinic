@@ -24,16 +24,15 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-    
-  test:
-    runs-on: ubuntu-latest
-  
-    steps:
+
     - name: Test with Maven
       run: mvn -B test --file pom.xml
+      
     - name: List all files in current directory
       run: ls -a
+      
     - name: Compile Tests
       run: mvn compiler:testCompile
+      
     - name: BDD Acceptance Testing
-      run: mvn -Dtest=”bdd.BDDEntryPointAcceptanceTest”test
+      run: mvn -Dtest=bdd.BDDEntryPointAcceptanceTest test
