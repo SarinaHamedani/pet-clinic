@@ -11,7 +11,6 @@ import org.springframework.samples.petclinic.utility.PetTimedCache;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class PetServiceSteps {
