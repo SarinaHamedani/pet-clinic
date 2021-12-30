@@ -28,7 +28,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
     - name: Compile Tests with Maven
       run: mvn compiler:testCompile
     - name: BDD Acceptance Tests
