@@ -29,6 +29,8 @@ jobs:
     runs-on: ubuntu-latest
   
     steps:
+    - name: Test with Maven
+      run: mvn -B test --file pom.xml
     - name: List all files in current directory
       run: ls -a
     - name: Compile Tests
