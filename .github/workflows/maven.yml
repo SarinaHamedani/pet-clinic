@@ -10,7 +10,7 @@ on:
     branches: [ ca7 ]
 
 jobs:
-  build:
+  build-and-test:
 
     runs-on: ubuntu-latest
 
@@ -22,14 +22,9 @@ jobs:
         java-version: '11'
         distribution: 'adopt'
         cache: maven
+        
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-
-    - name: Test with Maven
-      run: mvn -B test --file pom.xml
-      
-    - name: List all files in current directory
-      run: ls -a
       
     - name: Compile Tests
       run: mvn compiler:testCompile
